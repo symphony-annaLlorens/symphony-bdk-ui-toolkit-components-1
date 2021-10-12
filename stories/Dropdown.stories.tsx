@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Dropdown, DropdownOption, Icon, LabelValue, OptionRendererProps, SearchHeaderOption, TagRendererProps } from '../src/components';
+import { Dropdown, DropdownOption, Icon, LabelValue, OptionRendererProps, SearchHeaderOption, TagRendererProps, Validation } from '../src/components';
+import { Validators } from '../src/core/validators/validators';
 
 const defaultOptions: LabelValue[] = [
   { label: 'Option 1', value: '1' },
@@ -131,9 +132,33 @@ Default.args = {
   onTermSearch: onTermSearch,
   onChange: onChange
 };
+const logChange = (value, errorsMap) => {
+  if (!value) {
+    console.log('Component is valid:', value);
+  }
+  if (errorsMap) {
+    console.log('Errors Map:', errorsMap);
+  }
+};
 
 export const Select: React.FC = () => (
+
   <div>
+ 
+
+    <h2 className="tk-mt-5h">MultiSelect</h2>
+    <p>The Dropdown component can handle multiple selections. It is enabled with the <strong>isMultiSelect</strong> prop:</p>
+    <Validation
+      onValidationChanged={logChange}
+      validator={[Validators.MaxSelected(3)]}
+      errorMessage={'Max options: 3'}
+    >
+      <Dropdown options={personSelectorOptions} isMultiSelect placeHolder="Search for People" isInputClearable maxSelected={3}/>
+    </Validation>
+    <p>With the <strong>maxHeight</strong> prop you can control the height of the multiple selection before scrolling on the input.</p>
+    <Dropdown options={personSelectorOptions} isMultiSelect maxHeight={70} placeHolder="Search for People" isInputClearable noOptionMessage={'No options'}/>
+
+
     <p>Let`s have a look on the different props than can be used to render the dropdown: </p>
     <p className="tk-mt-4">
 			With <strong>placeholder</strong>:
@@ -181,12 +206,7 @@ export const Select: React.FC = () => (
     <p>In addition, you can customize the message with <strong>termSearchMessage</strong> prop:</p>
     <Dropdown options={defaultOptions} enableTermSearch termSearchMessage="This is my customized term search message. Term: "/>
     
-    <h2 className="tk-mt-5h">MultiSelect</h2>
-    <p>The Dropdown component can handle multiple selections. It is enabled with the <strong>isMultiSelect</strong> prop:</p>
-    <Dropdown options={personSelectorOptions} isMultiSelect placeHolder="Search for People" isInputClearable/>
-    <p>With the <strong>maxHeight</strong> prop you can control the height of the multiple selection before scrolling on the input.</p>
-    <Dropdown options={personSelectorOptions} isMultiSelect maxHeight={70} placeHolder="Search for People" isInputClearable noOptionMessage={'No options'}/>
-   
+
     <h2 className="tk-mt-5h">Loading options</h2>
     <p>Use the <strong>asyncOptions</strong> prop to load options from a remote source as the user starts typing on the input.</p>
     <p>The <strong>asyncOptions</strong> prop:</p>
